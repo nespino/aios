@@ -39,12 +39,13 @@ HISTORY_FILE = parse_arguments() if parse_arguments() else "history/default_hist
 
 # Function to simulate an AI model response
 def ai_response(model, prompt, role):
-    messages=[
+    messages = [
         {"role": role, "content": prompt},
     ]
-    response = client.chat.completions.create(model=model,  # Ensure 'model' is used instead of 'engine'
-    messages=messages,
-    max_tokens=2150)
+    response = client.chat.completions.create(
+        model=model,  # Ensure 'model' is used instead of 'engine'
+        messages=messages,
+        max_tokens=2150)
     return response.choices[0].message.content
 
 
@@ -53,12 +54,11 @@ def save_last_conversation(question, answer):
     if HISTORY_FILE:
         with open(HISTORY_FILE, "a") as f:
             f.write(question)
-            f.write("\n\n")
-            f.write('-' * 80)
+            f.write('-' * 50)
             f.write("\n\n")
             f.write(answer)
             f.write("\n\n")
-            f.write('-' * 80)
+            f.write('-' * 120)
             f.write("\n\n")
         # print(f"Conversation saved to {HISTORY_FILE}.")
     else:
@@ -77,8 +77,8 @@ def load_last_conversation():
         for i, line in enumerate(lines):
             # Check for the separator pattern
             if (
-                line.strip() == "" and 
-                i + 1 < len(lines) and lines[i + 1].strip() == "-" * 80 and 
+                line.strip() == "" and
+                i + 1 < len(lines) and lines[i + 1].strip() == "-" * 80 and
                 i + 2 < len(lines) and lines[i + 2].strip() == ""
             ):
                 # If we find a separator, save the current message
@@ -372,12 +372,12 @@ def run_command(command):
 def extract_code_blocks(prompt, start_delims=("```", "```bash"), end_delim="```"):
     """
     Extract code blocks from a prompt using specified delimiters.
-    
+
     Args:
         prompt (str): The input text containing code blocks.
         start_delims (tuple): Possible start delimiters.
         end_delim (str): The end delimiter.
-    
+
     Returns:
         list: A list of extracted code blocks as strings.
     """
